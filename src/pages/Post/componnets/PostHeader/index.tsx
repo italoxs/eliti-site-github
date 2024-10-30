@@ -4,13 +4,22 @@ import { PostHeaderContainer } from "./styles";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faCalendar, faChevronLeft, faComment } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import { IPost } from "../../../Home";
+import { relativeDateFormatter } from "../../../../utils/formatter";
 
-export function PostHeader() {
+interface PostHeaderProps {
+  posts: IPost;
+  isLoading: boolean;
+}
+
+export function PostHeader({ posts, isLoading }: PostHeaderProps) {
   const navigate = useNavigate();
 
   function goBack() {
     navigate(-1)
   }
+
+  const formattedDate = relativeDateFormatter(posts?.created_at);
 
   return (
     <PostHeaderContainer>
@@ -25,19 +34,19 @@ export function PostHeader() {
         <ExternalLink text="Ver no Github" href="#" target="_blank" />
       </header>
 
-      <h1>Github API com React</h1>
+      <h1>{posts.title}</h1>
       <ul>
         <li>
           <FontAwesomeIcon icon={faGithub}/>
-          italoxs
+          {posts.user.login}
         </li>
         <li>
           <FontAwesomeIcon icon={faCalendar}/>
-          Há 1 dia
+          {formattedDate}
         </li>
         <li>
           <FontAwesomeIcon icon={faComment}/>
-          5 comentários
+          {posts.comments} comentários
         </li>
       </ul>
     </PostHeaderContainer>
